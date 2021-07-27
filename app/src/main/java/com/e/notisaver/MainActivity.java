@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-        startActivity(intent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
 
             Intent intent2 = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -56,15 +54,6 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.i ("Service status", "Not running");
         return false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        Intent broadcastIntent = new Intent();
-        broadcastIntent.setAction("restartservice");
-        broadcastIntent.setClass(this, BReceiver.class);
-        this.sendBroadcast(broadcastIntent);
-        super.onDestroy();
     }
 }
 

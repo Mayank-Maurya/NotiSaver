@@ -3,24 +3,21 @@ package com.e.notisaver;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
-import android.os.Bundle;
-import android.service.notification.NotificationListenerService;
-import android.service.notification.StatusBarNotification;
-import android.util.Log;
+import android.os.IBinder;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-public class MyService extends NotificationListenerService {
+public class MyService extends Service {
     Context context;
-
-    String title = "";
-    String text = "";
-
 
     @Override
     public void onCreate() {
@@ -62,39 +59,6 @@ public class MyService extends NotificationListenerService {
         startForeground(2, notification);
     }
 
-
-    @Override
-    public void onNotificationPosted(StatusBarNotification sbn) {
-        try {
-            Bundle extras = sbn.getNotification().extras;
-            title = extras.getString("android.title");
-            text = extras.getCharSequence("android.text").toString();
-            Log.i("Title", title);
-            Log.i("Text", text);
-
-
-            if(!(text.toLowerCase().contentEquals("incoming call") || text.toLowerCase().contentEquals("current call")
-            || text.toLowerCase().contentEquals("ended call")))
-            {
-                Intent dialogIntent = new Intent(this, DialogActivity.class);
-                dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                dialogIntent.putExtra("title", title);
-                dialogIntent.putExtra("text", text);
-                startActivity(dialogIntent);
-            }
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-    @Override
-    public void onNotificationRemoved(StatusBarNotification sbn) {
-
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -102,6 +66,12 @@ public class MyService extends NotificationListenerService {
         broadcastIntent.setAction("restartservice");
         broadcastIntent.setClass(this, BReceiver.class);
         this.sendBroadcast(broadcastIntent);
+    }
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
 

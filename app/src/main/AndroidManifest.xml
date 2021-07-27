@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+
 
     <application
         android:allowBackup="true"
@@ -14,7 +18,7 @@
         android:theme="@style/Theme.NotiSaver">
         <activity
             android:name=".DialogActivity"
-            android:theme="@style/Theme.AppCompat.Dialog"></activity>
+            android:theme="@style/Theme.AppCompat.Dialog" />
 
         <receiver
             android:name=".BReceiver"
@@ -22,6 +26,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="restartservice" />
+                <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
 
@@ -38,12 +43,8 @@
         <service
             android:name=".MyService"
             android:enabled="true"
-            android:label="@string/app_name"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
+            android:exported="true"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>
